@@ -89,7 +89,7 @@ async function getAllUsers(req, res) {
         if (req.userData.role !== 'admin') {
             throw makeErrorObject('Only admins are allowd to access this route');
         }
-        const allUsers = await User.find();
+        const allUsers = await User.find({ role: 'user' });
         return res.status(200).json({
             message: 'Users fetched successfully',
             data: allUsers,

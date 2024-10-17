@@ -1,4 +1,3 @@
-// code
 const router = require('express').Router();
 const { verifyJWT } = require('../utils/verifyJWT');
 const {
@@ -11,6 +10,6 @@ const {
 router.route('/signUp-user').post(signUpUser);
 router.route('/signIn-user').post(signInUser);
 router.route('/getAllUsers').get(verifyJWT, getAllUsers);
-router.route('/updateUserStatus').post(verifyJWT, updateUserStatus);
+router.route('/updateUserStatus').put(verifyJWT, updateUserStatus);
 
 module.exports = router;

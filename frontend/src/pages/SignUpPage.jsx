@@ -28,22 +28,18 @@ const SignUpPage = () => {
     const onSubmit = async (formData) => {
         try {
             if (formStatus) {
-                console.log('sign up');
                 const response = await axios.post(url, formData, { withCredentials: true });
-                console.log('Response from backend:', response.data.data);
                 if (response.data?.data) {
                     setUserData(response.data.data);
                     localStorage.setItem('realz_sol_user_data', JSON.stringify(response.data.data));
                     navigate('/');
                 } else throw new Error('Failed to signup user');
             } else {
-                console.log('sign in');
                 const body = {
                     email: formData.emailLogin,
                     password: formData.passwordLogin,
                 };
                 const response = await axios.post(url, body, { withCredentials: true });
-                console.log('Response from backend:', response);
                 if (response.data?.data) {
                     setUserData(response.data.data);
                     localStorage.setItem('realz_sol_user_data', JSON.stringify(response.data.data));

@@ -18,7 +18,7 @@ const HomePage = () => {
                 {userData ? (
                     <div className="bg-gradient-to-r from-orange-500 to-pink-600  text-white py-2 px-6 rounded-md text-lg">
                         {userData.role === 'admin' ? (
-                            <Link>Dashboard</Link>
+                            <Link to="/protected/admin-protected/dashboard">Dashboard</Link>
                         ) : (
                             <Link to="/protected/make-call">Make Call</Link>
                         )}
