@@ -8,7 +8,6 @@ const AdminProtectedRoute = () => {
     const { userData } = useAppContext();
 
     useEffect(() => {
-        console.log(userData);
         if (userData.role !== 'admin') {
             navigate('/');
         }

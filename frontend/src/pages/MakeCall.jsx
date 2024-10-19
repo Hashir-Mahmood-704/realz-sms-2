@@ -40,7 +40,7 @@ const MakeCall = () => {
                 <p className="text-2xl">You need to enter twilio credentials first!</p>
                 <Link
                     to="/protected/twilio-credentials"
-                    className="mt-[20px] bg-gradient-to-r from-orange-500 to-pink-600  text-white py-2 px-6 rounded-md text-lg"
+                    className="mt-[20px] bg-blue-600 text-white py-2 px-6 rounded-md text-lg"
                 >
                     Enter Credentials
                 </Link>
@@ -52,7 +52,7 @@ const MakeCall = () => {
                 <h1 className="text-3xl font-medium">Send Twilio Call</h1>
                 <form
                     onSubmit={handleSubmit}
-                    className="border-2 border-orange-500 rounded-[10px] p-6 max-w-[1200px] flex flex-col gap-10 my-[50px]"
+                    className="border-2 border-blue-600 rounded-[10px] p-6 max-w-[1200px] flex flex-col gap-10 my-[50px]"
                 >
                     <input
                         type="text"
@@ -63,7 +63,7 @@ const MakeCall = () => {
                     />
                     <button
                         type="submit"
-                        className="bg-gradient-to-r from-orange-500 to-pink-600  text-white py-2 px-6 rounded-md text-lg"
+                        className="bg-blue-600 text-white py-2 px-6 rounded-md text-lg"
                     >
                         Send Call
                     </button>

@@ -6,9 +6,9 @@ const HomePage = () => {
     const { userData } = useAppContext();
     return (
         <>
-            <div className="flex flex-col items-center justify-center h-96">
+            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-120px)]">
                 {/* Welcome Message */}
-                <h1 className="text-4xl font-bold mb-4 text-gray-800">
+                <h1 className="text-blue-600 text-4xl font-bold mb-4">
                     Welcome to the Communication Platform
                 </h1>
                 <p className="text-lg text-gray-600 mb-8">
@@ -16,7 +16,7 @@ const HomePage = () => {
                 </p>
 
                 {userData ? (
-                    <div className="bg-gradient-to-r from-orange-500 to-pink-600  text-white py-2 px-6 rounded-md text-lg">
+                    <div className="bg-blue-600 text-white py-2 px-6 rounded-md text-lg">
                         {userData.role === 'admin' ? (
                             <Link to="/protected/admin-protected/dashboard">Dashboard</Link>
                         ) : (
@@ -24,9 +24,9 @@ const HomePage = () => {
                         )}
                     </div>
                 ) : (
-                    <div className="bg-gradient-to-r from-orange-500 to-pink-600  text-white py-2 px-6 rounded-md text-lg">
+                    <Link to='/signup' className="bg-blue-600  text-white py-2 px-6 rounded-md text-lg">
                         You need to sign in first
-                    </div>
+                    </Link>
                 )}
             </div>
         </>

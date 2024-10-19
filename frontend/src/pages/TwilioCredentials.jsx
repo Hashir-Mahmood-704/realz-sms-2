@@ -43,7 +43,7 @@ const TwilioCredentials = () => {
             <p className="text-3xl font-semibold">Enter your twilio credentails</p>
             <form
                 onSubmit={handleSubmit}
-                className="border-2 border-orange-500 rounded-[10px] p-6 max-w-[1200px] flex flex-col gap-10 my-[50px]"
+                className="border-2 border-blue-600 rounded-[10px] p-6 max-w-[1200px] flex flex-col gap-10 my-[50px]"
             >
                 <input
                     placeholder="Enter Twilio SID"
@@ -69,7 +69,7 @@ const TwilioCredentials = () => {
 
                 <button
                     type="submit"
-                    className="bg-gradient-to-r from-orange-500 to-pink-600  text-white py-2 px-6 rounded-md text-lg"
+                    className="bg-blue-600  text-white py-2 px-6 rounded-md text-lg"
                 >
                     Submit
                 </button>

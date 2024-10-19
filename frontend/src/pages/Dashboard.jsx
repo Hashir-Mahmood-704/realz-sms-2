@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import UserInfo from '../components/Userinfo';
 
+import Logo from '../assets/logo-2.jpeg';
+
 const Dashboard = () => {
     const [recordsLoading, setRecordsLoading] = useState(true);
     const [usersData, setUsersData] = useState([]);
@@ -13,9 +15,8 @@ const Dashboard = () => {
         async function fetchUsersData() {
             try {
                 const response = await axios.get(`${baseUrl}/api/user/getAllUsers`, {
-                    withCredentials: true,
+                    withCredentials: true
                 });
-                console.log('res: ', response.data.data);
                 if (response.data?.data) setUsersData(response.data.data);
                 else throw new Error('Something went wrong in fetching users data');
             } catch (error) {
@@ -24,6 +25,7 @@ const Dashboard = () => {
                 else console.error(error);
             }
         }
+
         fetchUsersData();
     }, [usersDataUpdated]);
 
@@ -32,7 +34,7 @@ const Dashboard = () => {
             try {
                 setRecordsLoading(true);
                 const response = await axios.get(`${baseUrl}/api/twilio/get-all-calls-record`, {
-                    withCredentials: true,
+                    withCredentials: true
                 });
                 if (response.data?.data) setAllRecordData(response.data?.data);
                 else throw new Error('Something went wrong in fetching all records data');
@@ -43,33 +45,79 @@ const Dashboard = () => {
                 setRecordsLoading(false);
             }
         }
+
         fetchAllCallsRecord();
     }, []);
 
     return (
-        <div>
-            <div>
-                <div className="flex-1 p-8">
-                    <div className="mb-6 flex justify-between items-center">
-                        <h1 className="text-xl font-semibold text-gray-800">
-                            Welcome to Admin Dashboard
-                        </h1>
-                    </div>
+        <div className="min-h-[calc(100vh-120px)]">
+            <div className="flex-1 p-8 ">
+                <div className="mb-6 flex flex-col items-center gap-[40px]">
+                    <img src={Logo} alt="logo" className="w-[150px] object-cover" />
+                    <h1 className="text-xl font-semibold text-gray-800">Welcome to Admin Dashboard</h1>
+                </div>
 
-                    {recordsLoading ? (
-                        <div>Loading calls records...</div>
-                    ) : (
-                        <div className="flex justify-center items-center gap-[20px] text-[18px] font-medium my-[40px]">
-                            <p>Total Calls : {allRecordData.totalCallsMade}</p>
-                            <p>Completed Calls : {allRecordData.completedCalls}</p>
-                            <p>Canceled Calls: {allRecordData.canceledCalls}</p>
-                            <p>Failed Calls : {allRecordData.failedCalls}</p>
-                            <p>Unanswered Calls : {allRecordData.notAnswered}</p>
-                            <p>Queued Calls : {allRecordData.queuedCalls}</p>
+                {recordsLoading ? (
+                    <div>Loading calls records...</div>
+                ) : (
+                    // <div className="flex flex-col justify-center gap-[10px] text-[16px] font-medium my-[20px]">
+                    //     <p>Total Calls : {allRecordData.totalCallsMade}</p>
+                    //     <p>Completed Calls : {allRecordData.completedCalls}</p>
+                    //     <p>Canceled Calls: {allRecordData.canceledCalls}</p>
+                    //     <p>Failed Calls : {allRecordData.failedCalls}</p>
+                    //     <p>Unanswered Calls : {allRecordData.notAnswered}</p>
+                    //     <p>Queued Calls : {allRecordData.queuedCalls}</p>
+                    // </div>
+                    <div className="w-full max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden my-8">
+                        <div className="bg-blue-500 text-white text-center py-2">
+                            <h2 className="text-xl font-semibold">Call Statistics</h2>
                         </div>
-                    )}
+                        <div className="p-2">
+                            <table className="w-full text-left table-auto">
+                                <tbody className="divide-y divide-gray-200">
+                                <tr className="bg-blue-50">
+                                    <td className="p-2 font-medium text-gray-700">Total Calls</td>
+                                    <td className="p-2 text-right font-semibold text-blue-700">
+                                        {allRecordData.totalCallsMade}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="p-2 font-medium text-gray-700">Completed Calls</td>
+                                    <td className="p-2 text-right font-semibold text-blue-700">
+                                        {allRecordData.completedCalls}
+                                    </td>
+                                </tr>
+                                <tr className="bg-blue-50">
+                                    <td className="p-2 font-medium text-gray-700">Canceled Calls</td>
+                                    <td className="p-2 text-right font-semibold text-blue-700">
+                                        {allRecordData.canceledCalls}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="p-2 font-medium text-gray-700">Failed Calls</td>
+                                    <td className="p-2 text-right font-semibold text-blue-700">
+                                        {allRecordData.failedCalls}
+                                    </td>
+                                </tr>
+                                <tr className="bg-blue-50">
+                                    <td className="p-2 font-medium text-gray-700">Unanswered Calls</td>
+                                    <td className="p-2 text-right font-semibold text-blue-700">
+                                        {allRecordData.notAnswered}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="p-2 font-medium text-gray-700">Queued Calls</td>
+                                    <td className="p-2 text-right font-semibold text-blue-700">
+                                        {allRecordData.queuedCalls}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
 
-                    {/* <div className="mb-4 flex items-center justify-between">
+                {/* <div className="mb-4 flex items-center justify-between">
                         <div className="relative w-1/2">
                             <input
                                 type="text"
@@ -85,22 +133,24 @@ const Dashboard = () => {
                         </button>
                     </div> */}
 
-                    {/* Table Header */}
-                    <div className="grid grid-cols-6 gap-[8rem] font-medium text-sm text-gray-600 mb-4 bg-gray-200 p-4">
-                        <h4>Username</h4>
-                        <h4>Email</h4>
-                        <h4>Role</h4>
-                        <h4>Status</h4>
-                    </div>
-
-                    {usersData.map((item) => (
-                        <UserInfo
-                            key={item._id}
-                            user={item}
-                            setUsersDataUpdated={setUsersDataUpdated}
-                        />
-                    ))}
+                {/* Table Header */}
+                {/*<div className="grid grid-cols-6  gap-[8rem] font-medium text-sm text-gray-600 mb-4 bg-gray-200 p-4">*/}
+                {/*    <h4>Username</h4>*/}
+                {/*    <h4>Email</h4>*/}
+                {/*    <h4>Role</h4>*/}
+                {/*    <h4>Status</h4>*/}
+                {/*</div>*/}
+                <div className="grid grid-cols-4 gap-6 text-base text-white bg-blue-600 rounded-t-lg p-4 shadow-md">
+                    <h4 className="font-semibold">Username</h4>
+                    <h4 className="font-semibold">Email</h4>
+                    <h4 className="font-semibold">Role</h4>
+                    <h4 className="font-semibold">Status</h4>
                 </div>
+
+
+                {usersData.map((item) => (
+                    <UserInfo key={item._id} user={item} setUsersDataUpdated={setUsersDataUpdated} />
+                ))}
             </div>
         </div>
     );

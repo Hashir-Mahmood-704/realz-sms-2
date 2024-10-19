@@ -23,37 +23,40 @@ const UserCallDetails = () => {
                 setLoading(false);
             }
         }
+
         fetchSingleUserData();
     }, []);
 
     if (loading) return <div>Loading....</div>;
     else if (callsData.length < 1) return <div>User has no calls</div>;
     return (
-        <div>
+        <div className='min-h-[calc(100vh-120px)]'>
             <div className="container mx-auto p-4">
-                <h1 className="text-xl font-semibold mb-4">User Call Details for ID: {userId}</h1>
-
-                {/* Call Records Table */}
-                <table className="min-w-full border border-gray-300">
+                <h1 className="text-xl text-blue-600 font-semibold my-[30px]">User Call Details for ID: {userId}</h1>
+                <table className="min-w-full border-collapse border border-gray-300 shadow-md rounded-lg">
                     <thead>
-                        <tr className="bg-gray-200 text-gray-700">
-                            <th className="border px-4 py-2 text-left">ID</th>
-                            <th className="border px-4 py-2 text-left">Sender</th>
-                            <th className="border px-4 py-2 text-left">Receiver</th>
-                            <th className="border px-4 py-2 text-left">Duration</th>
-                            <th className="border px-4 py-2 text-left">Status</th>
-                            <th className="border px-4 py-2 text-left">Date</th>
+                        <tr className="bg-blue-500 text-white">
+                            <th className="border border-blue-200 px-6 py-3 text-left font-semibold">ID</th>
+                            <th className="border border-blue-200 px-6 py-3 text-left font-semibold">Sender</th>
+                            <th className="border border-blue-200 px-6 py-3 text-left font-semibold">Receiver</th>
+                            <th className="border border-blue-200 px-6 py-3 text-left font-semibold">Duration</th>
+                            <th className="border border-blue-200 px-6 py-3 text-left font-semibold">Status</th>
+                            <th className="border border-blue-200 px-6 py-3 text-left font-semibold">Date</th>
                         </tr>
                     </thead>
                     <tbody>
                         {callsData.map((call) => (
-                            <tr key={call.sid} className="hover:bg-gray-100">
-                                <td className="border px-4 py-2 text-left">{call.sid}.</td>
-                                <td className="border px-4 py-2 text-left">{call.from}</td>
-                                <td className="border px-4 py-2 text-left">{call.to}</td>
-                                <td className="border px-4 py-2 text-left">{call.duration}s</td>
-                                <td className="border px-4 py-2 text-left">{call.status}</td>
-                                <td className="border px-4 py-2 text-left">{call.dateCreated}</td>
+                            <tr key={call.sid} className="hover:bg-blue-50 transition-colors">
+                                <td className="border border-gray-300 px-6 py-3 text-left">{call.sid}</td>
+                                <td className="border border-gray-300 px-6 py-3 text-left">{call.from}</td>
+                                <td className="border border-gray-300 px-6 py-3 text-left">{call.to}</td>
+                                <td className="border border-gray-300 px-6 py-3 text-left">{call.duration}s</td>
+                                <td
+                                    className={`border px-6 py-3 text-left ${call.status === 'completed' ? 'text-green-500' : 'text-red-500'}`}
+                                >
+                                    {call.status}
+                                </td>
+                                <td className="border border-gray-300 px-6 py-3 text-left">{call.dateCreated}</td>
                             </tr>
                         ))}
                     </tbody>
