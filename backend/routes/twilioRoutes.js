@@ -6,6 +6,7 @@ const {
     getTwilioNumbers,
     gatherResponse,
     updateUserTwilioCredentials,
+    sendCall
 } = require('../controllers/twilioController');
 const { verifyJWT } = require('../utils/verifyJWT');
 const upload = require('../middleware/multer');
@@ -20,6 +21,6 @@ router.route('/get-user-calls-records').post(verifyJWT, fetchUserTwilioCallsReco
 router.route('/get-all-calls-record').get(verifyJWT, getAllCallsRecords);
 router.route('/update-credentials').post(verifyJWT, updateUserTwilioCredentials);
 
-module.exports = router;
-
 // router.route('/send-call').post(verifyJWT, sendCall);
+router.route('/update-credentials').post(verifyJWT, updateUserTwilioCredentials);
+module.exports = router;
