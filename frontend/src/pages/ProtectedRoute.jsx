@@ -11,6 +11,8 @@ const ProtectedRoute = () => {
         if (!userData) {
             navigate('/signup');
         }
+        console.log("pathname:",pathname);
+        
     }, [pathname]);
 
     return (

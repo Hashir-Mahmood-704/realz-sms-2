@@ -1,5 +1,4 @@
 import { useAppContext } from '../context/AppContext';
-import Header from '../components/Header';
 import { Link } from 'react-router-dom';
 
 const HomePage = () => {
@@ -20,7 +19,7 @@ const HomePage = () => {
                         {userData.role === 'admin' ? (
                             <Link to="/protected/admin-protected/dashboard">Dashboard</Link>
                         ) : (
-                            <Link to="/protected/make-call">Make Call</Link>
+                            <Link to="/protected/campaign-call">Make Call</Link>
                         )}
                     </div>
                 ) : (

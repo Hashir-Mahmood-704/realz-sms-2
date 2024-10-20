@@ -7,7 +7,8 @@ import { useAppContext } from '../context/AppContext';
 import Logo from '../assets/logo-2.jpeg';
 
 const SignUpPage = () => {
-    const baseUrl = import.meta.env.VITE_API_URL;
+   // import.meta.env.VITE_API_URL
+    const baseUrl ='http://localhost:3000' ;
     const { userData, setUserData } = useAppContext();
 
     const navigate = useNavigate();
@@ -23,14 +24,23 @@ const SignUpPage = () => {
     // console.log('url of register:', url);
 
     useEffect(() => {
+        console.log("userData",userData);
+        
         if (userData) navigate('/');
     }, []);
 
     const onSubmit = async (formData) => {
+        
+          console.log("form Data", formData);
+          
         try {
             if (formStatus) {
                 const response = await axios.post(url, formData, { withCredentials: true });
+                 console.log("response",response);
+                 
                 if (response.data?.data) {
+                    console.log("response data",response.data.data);
+                    
                     setUserData(response.data.data);
                     localStorage.setItem('realz_sol_user_data', JSON.stringify(response.data.data));
                     navigate('/');

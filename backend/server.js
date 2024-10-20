@@ -25,8 +25,8 @@ app.use('/api/twilio', twilioRoutesHandler);
 connectDataBase()
     .then(() => {
         console.log('Database connected!');
-        app.listen(process.env.PORT, () => {
-            console.log(`Server is running on port: ${process.env.PORT}`);
+        app.listen(3000, () => {
+            console.log(`Server is running on port: 3000 `);
         });
     })
     .catch((error) => {
@@ -34,3 +34,5 @@ connectDataBase()
         if (error instanceof Error) console.error(error.message);
         else console.error(error);
     });
+  //process.env.PORT
+  //${process.env.PORT}

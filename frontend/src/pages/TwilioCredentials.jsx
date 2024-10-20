@@ -23,16 +23,25 @@ const TwilioCredentials = () => {
                 twilioToken,
                 twilioNumber,
             };
+            console.log("body ",body);
+            
             const response = await axios.post(
                 'http://localhost:3000/api/twilio/update-credentials',
                 body,
                 { withCredentials: true }
             );
+            console.log("response",response);
+            
             if (response.data.data) {
+                console.log("response data",response.data.data);
+                
                 setUserData(response.data.data);
                 localStorage.setItem('realz_sol_user_data', JSON.stringify(response.data.data));
-                navigate('/protected/make-call');
+                navigate('/protected/');
             } else throw new Error('Something went wrong in updating user twilio credentials');
+
+           
+
         } catch (error) {
             if (error instanceof Error) console.error(error.message);
             else console.error(error);
