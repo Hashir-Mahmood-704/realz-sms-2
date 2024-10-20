@@ -64,7 +64,8 @@ async function signInUser(req, res) {
                 _id: userExists._doc._id,
                 role: userExists._doc.role
             },
-            process.env.JWT_SECRET
+            '3c3496e9de0640d8add7ebd968ce42f441ccfeae4f576b678afc8e25365d86c1'
+            // process.env.JWT_SECRET
         );
         const { password: _password, ...passwordExcludedUserDocument } = { ...userExists._doc };
         res.cookie('token', token, { httpOnly: true });

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useAppContext } from '../context/AppContext';
+// import { useAppContext } from '../context/AppContext';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 const CampaignPage = () => {
     const [campaignName, setCampaignName] = useState('');
@@ -12,7 +12,7 @@ const CampaignPage = () => {
     const [transferCallNumber, setTransferCallNumber] = useState('');
     const [scriptText, setScriptText] = useState('');
     const [csvFile, setCsvFile] = useState(null);
-    const { userData } = useAppContext();
+    // const { userData } = useAppContext();
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
@@ -45,19 +45,19 @@ const CampaignPage = () => {
         }
     };
 
-    if (!userData.twilioSid) {
-        return (
-            <div className="min-h-screen flex justify-center items-center flex-col">
-                <p className="text-2xl">You need to enter twilio credentials first!</p>
-                <Link
-                    to="/protected/twilio-credentials"
-                    className="mt-[20px] bg-blue-600 text-white py-2 px-6 rounded-md text-lg"
-                >
-                    Enter Credentials
-                </Link>
-            </div>
-        );
-    } else {
+    // if (!userData.twilioSid) {
+    //     return (
+    //         <div className="min-h-screen flex justify-center items-center flex-col">
+    //             <p className="text-2xl">You need to enter twilio credentials first!</p>
+    //             <Link
+    //                 to="/protected/twilio-credentials"
+    //                 className="mt-[20px] bg-blue-600 text-white py-2 px-6 rounded-md text-lg"
+    //             >
+    //                 Enter Credentials
+    //             </Link>
+    //         </div>
+    //     );
+    // } else {
         return (
             <div className="min-h-screen bg-blue-50 flex justify-center items-center">
                 <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-5xl">
@@ -182,7 +182,7 @@ const CampaignPage = () => {
                 </div>
             </div>
         );
-    }
+    
 };
 
 export default CampaignPage;

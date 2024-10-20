@@ -7,8 +7,8 @@ import { useAppContext } from '../context/AppContext';
 import Logo from '../assets/logo-2.jpeg';
 
 const SignUpPage = () => {
-   // import.meta.env.VITE_API_URL
-    const baseUrl ='http://localhost:3000' ;
+    // import.meta.env.VITE_API_URL
+    const baseUrl = 'http://localhost:3000';
     const { userData, setUserData } = useAppContext();
 
     const navigate = useNavigate();
@@ -24,32 +24,29 @@ const SignUpPage = () => {
     // console.log('url of register:', url);
 
     useEffect(() => {
-        console.log("userData",userData);
-        
+        console.log('userData', userData);
+
         if (userData) navigate('/');
     }, []);
 
     const onSubmit = async (formData) => {
-        
-          console.log("form Data", formData);
-          
         try {
             if (formStatus) {
+                // Sign Up logic
                 const response = await axios.post(url, formData, { withCredentials: true });
-                 console.log("response",response);
-                 
                 if (response.data?.data) {
-                    console.log("response data",response.data.data);
-                    
                     setUserData(response.data.data);
                     localStorage.setItem('realz_sol_user_data', JSON.stringify(response.data.data));
                     navigate('/');
                 } else throw new Error('Failed to signup user');
             } else {
+                // Sign In logic
                 const body = {
-                    email: formData.emailLogin,
-                    password: formData.passwordLogin
+                    email: formData.email,
+                    password: formData.password
                 };
+                console.log('signIn body:', body);
+
                 const response = await axios.post(url, body, { withCredentials: true });
                 if (response.data?.data) {
                     setUserData(response.data.data);
@@ -58,7 +55,7 @@ const SignUpPage = () => {
                 } else throw new Error('Failed to signin user');
             }
         } catch (error) {
-            console.error('Error in sign up page');
+            console.error('Error in sign up/sign in page');
             if (error instanceof Error) console.error(error.message);
             else console.error(error);
         }
@@ -227,7 +224,7 @@ const SignUpPage = () => {
                         <>
                             <div className="mb-2">
                                 <input
-                                    {...register('emailLogin', {
+                                    {...register('email', {
                                         required: 'Email is required',
                                         pattern: {
                                             value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -235,20 +232,18 @@ const SignUpPage = () => {
                                         }
                                     })}
                                     className={`border-[1px] p-2 mb-[10px] w-full rounded-lg focus:outline-none ${
-                                        errors.emailLogin ? 'border-red-500' : 'border-gray-300'
+                                        errors.email ? 'border-red-500' : 'border-gray-300'
                                     }`}
                                     type="email"
-                                    id="emailLogin"
+                                    id="email"
                                     placeholder="Email"
                                 />
-                                {errors.emailLogin && (
-                                    <p className="text-red-500 text-sm">{errors.emailLogin.message}</p>
-                                )}
+                                {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
                             </div>
 
                             <div className="mb-2">
                                 <input
-                                    {...register('passwordLogin', {
+                                    {...register('password', {
                                         required: 'Password is required',
                                         minLength: {
                                             value: 6,
@@ -256,15 +251,13 @@ const SignUpPage = () => {
                                         }
                                     })}
                                     className={`border-[1px] p-2 mb-[10px] w-full rounded-lg focus:outline-none ${
-                                        errors.passwordLogin ? 'border-red-500' : 'border-gray-300'
+                                        errors.password ? 'border-red-500' : 'border-gray-300'
                                     }`}
                                     type="password"
-                                    id="passwordLogin"
+                                    id="password"
                                     placeholder="Password"
                                 />
-                                {errors.passwordLogin && (
-                                    <p className="text-red-500 text-sm">{errors.passwordLogin.message}</p>
-                                )}
+                                {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
                             </div>
                         </>
                     )}
