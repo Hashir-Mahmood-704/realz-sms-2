@@ -6,6 +6,7 @@ const {
     getTwilioNumbers,
     gatherResponse,
     updateUserTwilioCredentials,
+    sendCall
 } = require('../controllers/twilioController');
 const { verifyJWT } = require('../utils/verifyJWT');
 const upload = require('../middleware/multer');

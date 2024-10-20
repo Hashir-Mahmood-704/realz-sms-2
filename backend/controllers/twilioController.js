@@ -3,32 +3,8 @@ const User = require('../models/userModel');
 const fsPromise = require('fs/promises');
 const twilio = require('twilio');
 
-async function gatherResponse(req, res) {
-    try {
-        const { Digits } = req.body;
-        const transferCallNumber = req.query.transferCallNumber;
-        console.log('digit pressed: ', Digits);
-        console.log('transfer number: ', transferCallNumber);
-        const twiml = new twilio.twiml.VoiceResponse();
-        if (Digits === '1') {
-            // If '1' is pressed, transfer the call to the specified number
-            twiml.say('Transferring your call now.');
-            twiml.dial(transferCallNumber); // Transfer the call
-        } else {
-            // If another key is pressed, give feedback
-            twiml.say(`You pressed ${Digits}. This option is not available. Goodbye!`);
-        }
-        res.type('text/xml');
-        res.send(twiml.toString());
-    } catch (error) {
-        console.error('Error in transfring calls');
-        errorHandler(error, res);
-    }
-}
-
 async function createCampaign(req, res) {
     try {
-        
         if (!req.file) throw makeErrorObject('File not found', 400);
         const { campaignName, twilioSid, twilioToken, twilioNumber, callText, transferCallNumber } = req.body;
         if (!campaignName || !twilioSid || !twilioToken || !twilioNumber || !callText || !transferCallNumber) {
@@ -67,6 +43,29 @@ async function createCampaign(req, res) {
         return res.status(200).json({ message: 'Calls sent successfully', success: true });
     } catch (error) {
         console.error('Error in creating new campaign:', error);
+        errorHandler(error, res);
+    }
+}
+
+async function gatherResponse(req, res) {
+    try {
+        const { Digits } = req.body;
+        const transferCallNumber = req.query.transferCallNumber;
+        console.log('digit pressed: ', Digits);
+        console.log('transfer number: ', transferCallNumber);
+        const twiml = new twilio.twiml.VoiceResponse();
+        if (Digits === '1') {
+            // If '1' is pressed, transfer the call to the specified number
+            twiml.say('Transferring your call now.');
+            twiml.dial(transferCallNumber); // Transfer the call
+        } else {
+            // If another key is pressed, give feedback
+            twiml.say(`You pressed ${Digits}. This option is not available. Goodbye!`);
+        }
+        res.type('text/xml');
+        res.send(twiml.toString());
+    } catch (error) {
+        console.error('Error in transfring calls');
         errorHandler(error, res);
     }
 }
@@ -171,55 +170,6 @@ async function getAllCallsRecords(req, res) {
     }
 }
 
-//
-async function updateUserTwilioCredentials(req, res) {
-    try {
-        const { userId, twilioSid, twilioToken, twilioNumber } = req.body;
-        if (!userId || !twilioSid || !twilioToken || !twilioNumber) {
-            throw makeErrorObject('All fields required', 400);
-        }
-        const userExists = await User.findById(userId);
-        if (!userExists) throw makeErrorObject('User does not exists', 404);
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            {
-                twilioNumber,
-                twilioSid,
-                twilioToken
-            },
-            { new: true, runValidators: true }
-        );
-        return res.status(201).json({
-            message: 'User twilio credentails updated successfully',
-            success: true,
-            data: updatedUser._doc
-        });
-    } catch (error) {
-        console.error('Error in updating user twilio credentails');
-        errorHandler(error, res);
-    }
- }
-
- async function sendCall(req, res) {
-    try {
-        const { twilioSid, twilioToken, twilioNumber, receiverNumber } = req.body;
-        if (!twilioSid || !twilioToken || !twilioNumber || !receiverNumber) {
-            throw makeErrorObject('All fields required', 400);
-        }
-        const client = require('twilio')(twilioSid, twilioToken);
-        const callOptions = {
-            from: twilioNumber,
-            to: receiverNumber,
-            twiml: `<Response><Say>Hello, this is a call from twilio</Say></Response>`
-        };
-        const callResponse = await client.calls.create(callOptions);
-        return res.status(200).json({ message: 'Twilio call sent successfully', success: true });
-    } catch (error) {
-        console.error('Error in sending twilio call');
-        errorHandler(error, res);
-    }
-}
-
 async function sendCall(req, res) {
     try {
         const { twilioSid, twilioToken, twilioNumber, receiverNumber } = req.body;
@@ -268,13 +218,12 @@ async function updateUserTwilioCredentials(req, res) {
     }
 }
 
-
-
 module.exports = {
     createCampaign,
     fetchUserTwilioCallsRecord,
     getAllCallsRecords,
     getTwilioNumbers,
-    gatherResponse
+    gatherResponse,
+    updateUserTwilioCredentials,
+    sendCall
 };
-
