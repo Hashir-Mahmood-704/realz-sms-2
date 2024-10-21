@@ -6,8 +6,17 @@ const twilio = require('twilio');
 async function createCampaign(req, res) {
     try {
         if (!req.file) throw makeErrorObject('File not found', 400);
-        const { campaignName, twilioSid, twilioToken, twilioNumber, callText, transferCallNumber } = req.body;
-        if (!campaignName || !twilioSid || !twilioToken || !twilioNumber || !callText || !transferCallNumber) {
+        const { campaignName, twilioSid, twilioToken, twilioNumber, callText, transferCallNumber, transferDigit } =
+            req.body;
+        if (
+            !campaignName ||
+            !twilioSid ||
+            !twilioToken ||
+            !twilioNumber ||
+            !callText ||
+            !transferCallNumber ||
+            !transferDigit
+        ) {
             throw makeErrorObject('All fields required', 400);
         }
         console.log('Campaign data:', { transferCallNumber, twilioNumber });
@@ -20,21 +29,28 @@ async function createCampaign(req, res) {
         if (!baseUrl) {
             throw new Error('BASE_URL environment variable is not set');
         }
-        const webhookUrl = `${baseUrl}/api/twilio/gather-response?transferCallNumber=${encodeURIComponent(
-            transferCallNumber
-        )}`;
+        const webhookUrl = `${baseUrl}/api/twilio/gather-response?transferDigit=${encodeURIComponent(
+            transferDigit
+        )}&transferCallNumber=${encodeURIComponent(transferCallNumber)}`;
+
         console.log('Webhook URL:', webhookUrl);
 
         const callPromises = fileDataInArray.map((number) => {
+            const twiml = new twilio.twiml.VoiceResponse();
+            twiml
+                .gather({
+                    numDigits: 1,
+                    timeout: 30,
+                    action: webhookUrl,
+                    method: 'POST'
+                })
+                .say(callText);
+            twiml.say("We didn't receive any input. Goodbye!");
+
             const callOptions = {
                 from: twilioNumber,
                 to: number,
-                twiml: `<Response>
-                    <Gather numDigits="1" timeout="30" action="${webhookUrl}" method="POST">
-                        <Say>${callText}</Say>
-                    </Gather>
-                    <Say>We didn't receive any input. Goodbye!</Say>
-                </Response>`
+                twiml: twiml.toString()
             };
             return client.calls.create(callOptions);
         });
@@ -51,21 +67,24 @@ async function gatherResponse(req, res) {
     try {
         const { Digits } = req.body;
         const transferCallNumber = req.query.transferCallNumber;
-        console.log('digit pressed: ', Digits);
-        console.log('transfer number: ', transferCallNumber);
+        const transferDigit = req.query.transferDigit || '2';
+        console.log('Received Digits:', Digits);
+        console.log('Transfer Number:', transferCallNumber);
+        console.log('Transfer Digit:', transferDigit);
+
         const twiml = new twilio.twiml.VoiceResponse();
-        if (Digits === '1') {
-            // If '1' is pressed, transfer the call to the specified number
+        if (Digits === transferDigit) {
             twiml.say('Transferring your call now.');
-            twiml.dial(transferCallNumber); // Transfer the call
+            twiml.dial(transferCallNumber);
         } else {
-            // If another key is pressed, give feedback
             twiml.say(`You pressed ${Digits}. This option is not available. Goodbye!`);
         }
+
+        console.log('Generated TwiML:', twiml.toString());
         res.type('text/xml');
         res.send(twiml.toString());
     } catch (error) {
-        console.error('Error in transfring calls');
+        console.error('Error in transferring calls:', error);
         errorHandler(error, res);
     }
 }
